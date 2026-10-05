@@ -11,29 +11,30 @@ function hideElement(e) {
     e.hidden = true;
 }
 
-const auroriteInput = document.getElementById("auroriteInput")
-const triaInput = document.getElementById("triaInput")
-
-function loadDetails(card) {
-    editCard.querySelector("#thumbnailPreview").src = card.querySelector(".thumbnail").src;
-    auroriteInput.value = card.querySelector(".priceAurorite").textContent;
-    triaInput.value = card.querySelector(".priceTria").textContent;
-    // console.log(card.querySelector(".thumbnail").src);
-    // console.log(card.querySelector(".priceTria").textContent);
-    // console.log(card.querySelector(".priceAurorite").textContent);
-}
-
-function saveDetails(card) {
-    card.querySelector(".thumbnail").src = editCard.querySelector("#thumbnailPreview").src;
-    card.querySelector(".priceAurorite").textContent = auroriteInput.value;
-    card.querySelector(".priceTria").textContent = triaInput.value;
-}
-
 // Edit Card
 const overlay = document.getElementById("overlay")
 const editCard = document.getElementById("editCard")
 const fileUpload = document.getElementById("fileUpload")
 const addButton = document.getElementById("addButton")
+const soldOutCheckbox = document.getElementById("soldOutCheckbox")
+
+// const auroriteInput = document.getElementById("auroriteInput")
+const triaInput = document.getElementById("triaInput")
+
+function loadDetails(card) {
+    editCard.querySelector("#thumbnailPreview").src = card.querySelector(".thumbnail").src;
+    // auroriteInput.value = card.querySelector(".priceAurorite").textContent;
+    triaInput.value = card.querySelector(".priceTria").textContent;
+    soldOutCheckbox.checked = !card.querySelector(".soldOutOverlay").hidden;
+    editCard.querySelector(".soldOutOverlay").hidden = card.querySelector(".soldOutOverlay").hidden;
+}
+
+function saveDetails(card) {
+    card.querySelector(".thumbnail").src = editCard.querySelector("#thumbnailPreview").src;
+    // card.querySelector(".priceAurorite").textContent = auroriteInput.value;
+    card.querySelector(".priceTria").textContent = triaInput.value;
+    card.querySelector(".soldOutOverlay").hidden = editCard.querySelector(".soldOutOverlay").hidden;
+}
 
 var editing = false
 var target = null;
@@ -61,7 +62,7 @@ window.addEventListener('click', (e) => {
             target = cardTarget;
             loadDetails(target);
             showElement(overlay)
-            showElement(editCard)
+            // showElement(editCard)
         }
     } else {
         if (!e.target.closest("#editCard")) {
@@ -69,9 +70,13 @@ window.addEventListener('click', (e) => {
             saveDetails(target);
             target = null;
             hideElement(overlay)
-            hideElement(editCard)
+            // hideElement(editCard)
         }
     }
+})
+
+soldOutCheckbox.addEventListener("change", () => {
+    editCard.querySelector(".soldOutOverlay").hidden = !soldOutCheckbox.checked;
 })
 
 fileUpload.addEventListener("change", (e) => {

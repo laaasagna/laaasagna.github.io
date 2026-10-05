@@ -4,7 +4,7 @@ body {
 }
 
 .deck {
-    border: 2px dashed rgba(100,100,100,0.1);
+    border: 2px dashed rgba(100, 100, 100, 0.1);
     display: grid;
     align-content: center;
     grid-template-columns: repeat(auto-fit, 18vw);
@@ -23,10 +23,6 @@ body {
     cursor: grab;
     /* display: grid; */
 }
-.priceTria, .priceAurorite {
-    display: inline;
-    font-size: 24px;
-}
 
 .card.dragging {
     opacity: 0.5;
@@ -37,12 +33,12 @@ body {
     outline: 1px solid #999999;
 
     position: fixed;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    z-index:9999;
-    background-color:rgba(0, 0, 0, 0.2);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 #editCard {
@@ -50,16 +46,44 @@ body {
     aspect-ratio: 0.8 auto;
     width: auto;
     background-color: #e2dcd1;
-    margin: 0 auto; /* optional */
-    margin-top: 20vh; /* optional */
+    margin: 0 auto;
+    /* optional */
+    margin-top: 20vh;
+    /* optional */
 }
 
 .price {
     text-align: center;
 }
+
 .currency {
     width: 24px;
-    vertical-align:middle;
+
+}
+
+.priceTria,
+.priceAurorite {
+    display: inline;
+    font-size: 24px;
+    font-family: arial, helvetica, sans-serif;
+    /* color: #6a3a15; */
+}
+
+.thumbnailWrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.soldOutOverlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 2;
 }
 
 /* p {
@@ -72,6 +96,8 @@ body {
 } */
 
 .thumbnail {
+    display: block;
     width: 100%;
+    max-width: 50vw;
     object-fit: contain;
 }
