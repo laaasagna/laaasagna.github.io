@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <!-- EDIT CARD PAGE -->
+    <div id="overlay" hidden>
+        <table id="editCard" draggable="false">
+            <tr>
+                <td>
+                    <img id="thumbnailPreview" class="thumbnail" src="placeholder.png" draggable="false">
+                </td>
+            </tr>
+            <tr>
+                <td class="price" draggable="false">
+                    <input id="fileUpload" type="file" style="padding-left: 4qi;"><br>
+                    
+                    <img class="currency" src="https://static.wikia.nocookie.net/roblox-the-portal/images/a/a5/Tria.png"
+                        draggable="false">
+
+                    <input id="triaInput" type="number" value=0><br>
+
+                    <img class="currency"
+                        src="https://static.wikia.nocookie.net/roblox-the-portal/images/8/82/Mat_Aurorite.png"
+                        style="scale: 1.2;" draggable="false">
+
+                    <input id="auroriteInput" type="number" name="auroritePrice" value=0><br>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- MAIN CARD DECK -->
+    <div id="cardsContainer" class="deck">
+    </div>
+    <button id="addButton">Add Card</button>
+    <p id="debugText"></p>
+
+    <!-- CARD TEMPLATE -->
+    <table id="cardTemplate" class="card" draggable="true" hidden>
+        <tr>
+            <td>
+                <img class="thumbnail" src="placeholder.png" draggable="false">
+            </td>
+        </tr>
+        <tr>
+            <td class="price" draggable="false">
+                <img class="currency" src="https://static.wikia.nocookie.net/roblox-the-portal/images/a/a5/Tria.png"
+                    draggable="false">
+                <p class="priceTria">0</p>
+                <img class="currency"
+                    src="https://static.wikia.nocookie.net/roblox-the-portal/images/8/82/Mat_Aurorite.png"
+                    style="scale:1.2;" draggable="false">
+                <p class="priceAurorite">0</p>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
