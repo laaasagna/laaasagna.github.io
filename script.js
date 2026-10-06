@@ -98,7 +98,7 @@ window.addEventListener("keydown", (e) => {
             closeCard()
         }
 
-        if (e.key === "Backspace" && target) {
+        if (e.key === "Backspace" && target ) {
             target.remove();
             target = null;
             hideElement(overlay)
