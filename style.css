@@ -1,10 +1,11 @@
 body {
     background-color: #e2dcd1;
     align-content: center;
+    padding: 8px;
 }
 
 .deck {
-    border: 2px dashed rgba(100, 100, 100, 0.1);
+    border: 2px dashed rgba(200, 0, 0, 0.1);
     display: grid;
     align-content: center;
     grid-template-columns: repeat(auto-fill, 18vw);
@@ -56,14 +57,15 @@ body {
 }
 
 .currency {
-    width: 24px;
+    width: clamp(10px, 3vw, 24px);
     margin-bottom: -4px;
 }
 
 .priceTria,
 .priceAurorite {
     display: inline;
-    font-size: 22px;
+    /* font-size: 22px; */
+    font-size: clamp(10px, 2.5vw, 24px);
     font-family: "platypi";
     color: dimgray;
 }

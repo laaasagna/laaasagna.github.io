@@ -1,5 +1,7 @@
-const cards = document.getElementById("cardsContainer");
+const deck = document.getElementById("cardsContainer");
 const debugText = document.getElementById("debugText");
+
+// let cardData = []
 
 // Template
 const templateCard = document.getElementById("cardTemplate")
@@ -15,11 +17,23 @@ function hideElement(e) {
 const overlay = document.getElementById("overlay")
 const editCard = document.getElementById("editCard")
 const fileUpload = document.getElementById("fileUpload")
-const addButton = document.getElementById("addButton")
 const soldOutCheckbox = document.getElementById("soldOutCheckbox")
+
+const addButton = document.getElementById("addButton")
+const saveButton = document.getElementById("saveButton")
+const loadButton = document.getElementById("loadButton")
+const clearButton = document.getElementById("clearButton")
 
 // const auroriteInput = document.getElementById("auroriteInput")
 const triaInput = document.getElementById("triaInput")
+
+function createCard() {
+    const copy = templateCard.cloneNode(true)
+    setupDraggable(copy)
+    deck.appendChild(copy)
+    copy.hidden = false
+    return copy
+}
 
 function loadDetails(card) {
     editCard.querySelector("#thumbnailPreview").src = card.querySelector(".thumbnail").src;
@@ -36,10 +50,10 @@ function saveDetails(card) {
     card.querySelector(".soldOutOverlay").hidden = editCard.querySelector(".soldOutOverlay").hidden;
 }
 
-function openCard(_target) {
+function openCard(card) {
     editing = true
-    target = _target;
-    loadDetails(target);
+    target = card;
+    loadDetails(card);
     showElement(overlay)
     triaInput.focus()
     triaInput.select()
@@ -52,27 +66,84 @@ function closeCard() {
     hideElement(overlay)
 }
 
+const canvas = document.createElement("canvas");
+document.body.appendChild(canvas);
+canvas.hidden = true
+
+let saving = false;
+async function saveShop() {
+    saving = true;
+    debugText.textContent = "Saving..."
+    let cardData = []
+    for (const card of deck.querySelectorAll(".card")) {
+        // Saving thumbnails
+        const thumbnail = card.querySelector(".thumbnail")
+
+        canvas.width = 200;
+        canvas.height = 200 * (thumbnail.naturalHeight / thumbnail.naturalWidth);
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(thumbnail, 0, 0, canvas.width, canvas.height);
+
+        cardData.push([
+            card.querySelector(".priceTria").textContent,
+            card.querySelector(".soldOutOverlay").hidden,
+            canvas.toDataURL("image/jpeg", 0.8)
+        ]);
+    }
+    localStorage.setItem("lastSave", JSON.stringify(cardData))
+    saving = false;
+    setTimeout(function () {
+        debugText.textContent = "Saved"
+    }, Math.random() * 500 + 500)
+    setTimeout(function () {
+        debugText.textContent = ""
+    }, 3000)
+}
+
+function loadShop() {
+    const lastSave = JSON.parse(localStorage.getItem("lastSave"))
+    for (const savedCard of lastSave) {
+        let card = createCard()
+        // card.querySelector(".priceAurorite").textContent = 
+        card.querySelector(".priceTria").textContent = savedCard[0];
+        card.querySelector(".soldOutOverlay").hidden = savedCard[1];
+        card.querySelector(".thumbnail").src = savedCard[2];
+    }
+}
+
+// Buttons
+addButton.addEventListener("click", function () {
+    openCard(createCard());
+});
+saveButton.addEventListener("click", saveShop)
+loadButton.addEventListener("click", loadShop)
+clearButton.addEventListener("click", function() {
+    for (const card of deck.querySelectorAll(".card")) {
+        card.remove()
+    }
+})
+
+
 var editing = false
 var target = null;
-addButton.addEventListener("click", () => {
-    const copy = templateCard.cloneNode(true)
-    copy.id = ""
-    setupDraggable(copy)
-    cards.appendChild(copy)
-    copy.hidden = false
-});
 
 const preview = document.getElementById("thumbnailPreview")
 window.addEventListener('paste', (e) => {
     if (editing) {
         e.preventDefault();
-        fileUpload.files = e.clipboardData.files;
-        preview.src = URL.createObjectURL(fileUpload.files[0]);
+        if (e.clipboardData.files) {
+            fileUpload.files = e.clipboardData.files;
+            preview.src = URL.createObjectURL(fileUpload.files[0]);
+        }
     }
 });
 
 window.addEventListener('click', (e) => {
     const cardTarget = e.target.closest(".card");
+    if (e.target.closest("button")) {
+        return;
+    }
     if (!editing) {
         if (cardTarget) {
             openCard(cardTarget);
@@ -98,10 +169,18 @@ window.addEventListener("keydown", (e) => {
             closeCard()
         }
 
-        if (e.key === "Backspace" && target ) {
-            target.remove();
-            target = null;
-            hideElement(overlay)
+        if ((e.key === "Backspace" || e.key === "Delete") && target) {
+            const ignore = document.activeElement &&
+                (
+                    document.activeElement.matches("input, textarea, select") ||
+                    document.activeElement.isContentEditable
+                );
+            if (!ignore) {
+                target.remove();
+                target = null;
+                hideElement(overlay)
+                editing = false
+            }
         }
     }
 })
@@ -130,7 +209,7 @@ function setupDraggable(card) {
         const rect = card.getBoundingClientRect();
         const before = e.clientX < rect.left + rect.width / 2;
 
-        const container = cards;
+        const container = deck;
         const target = before ? card : card.nextSibling;
 
         if (target !== draggedCard && target !== draggedCard.nextSibling) {
@@ -143,7 +222,7 @@ function setupDraggable(card) {
 
         if (!draggedCard || draggedCard === card) return;
 
-        const parent = cards;
+        const parent = deck;
         // const isAfter = card.compareDocumentPosition(draggedCard) & Node.DOCUMENT_POSITION_FOLLOWING;
 
         if (getDropPosition(card, e) === "after") {
