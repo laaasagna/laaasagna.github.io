@@ -88,7 +88,7 @@ async function saveShop() {
         cardData.push([
             card.querySelector(".priceTria").textContent,
             card.querySelector(".soldOutOverlay").hidden,
-            canvas.toDataURL("image/jpeg", 0.8)
+            canvas.toDataURL("image/jpeg", 0.9)
         ]);
     }
     localStorage.setItem("lastSave", JSON.stringify(cardData))
