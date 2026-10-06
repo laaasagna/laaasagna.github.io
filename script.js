@@ -36,6 +36,22 @@ function saveDetails(card) {
     card.querySelector(".soldOutOverlay").hidden = editCard.querySelector(".soldOutOverlay").hidden;
 }
 
+function openCard(_target) {
+    editing = true
+    target = _target;
+    loadDetails(target);
+    showElement(overlay)
+    triaInput.focus()
+    triaInput.select()
+}
+
+function closeCard() {
+    editing = false
+    saveDetails(target);
+    target = null;
+    hideElement(overlay)
+}
+
 var editing = false
 var target = null;
 addButton.addEventListener("click", () => {
@@ -49,6 +65,7 @@ addButton.addEventListener("click", () => {
 const preview = document.getElementById("thumbnailPreview")
 window.addEventListener('paste', (e) => {
     if (editing) {
+        e.preventDefault();
         fileUpload.files = e.clipboardData.files;
         preview.src = URL.createObjectURL(fileUpload.files[0]);
     }
@@ -58,19 +75,11 @@ window.addEventListener('click', (e) => {
     const cardTarget = e.target.closest(".card");
     if (!editing) {
         if (cardTarget) {
-            editing = true
-            target = cardTarget;
-            loadDetails(target);
-            showElement(overlay)
-            // showElement(editCard)
+            openCard(cardTarget);
         }
     } else {
         if (!e.target.closest("#editCard")) {
-            editing = false
-            saveDetails(target);
-            target = null;
-            hideElement(overlay)
-            // hideElement(editCard)
+            closeCard()
         }
     }
 })
@@ -83,8 +92,21 @@ fileUpload.addEventListener("change", (e) => {
     preview.src = URL.createObjectURL(fileUpload.files[0]);
 })
 
-// AI GENERATED CODE
+window.addEventListener("keydown", (e) => {
+    if (editing) {
+        if (e.key === "Enter") {
+            closeCard()
+        }
 
+        if (e.key === "Backspace" && target) {
+            target.remove();
+            target = null;
+            hideElement(overlay)
+        }
+    }
+})
+
+// AI GENERATED CODE
 function setupDraggable(card) {
     card.draggable = true;
 
@@ -122,7 +144,7 @@ function setupDraggable(card) {
         if (!draggedCard || draggedCard === card) return;
 
         const parent = cards;
-        const isAfter = card.compareDocumentPosition(draggedCard) & Node.DOCUMENT_POSITION_FOLLOWING;
+        // const isAfter = card.compareDocumentPosition(draggedCard) & Node.DOCUMENT_POSITION_FOLLOWING;
 
         if (getDropPosition(card, e) === "after") {
             parent.insertBefore(draggedCard, card.nextSibling);

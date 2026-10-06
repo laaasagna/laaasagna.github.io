@@ -7,7 +7,7 @@ body {
     border: 2px dashed rgba(100, 100, 100, 0.1);
     display: grid;
     align-content: center;
-    grid-template-columns: repeat(auto-fit, 18vw);
+    grid-template-columns: repeat(auto-fill, 18vw);
     row-gap: 7px;
     column-gap: 7px;
     justify-content: center;
@@ -48,8 +48,7 @@ body {
     background-color: #e2dcd1;
     margin: 0 auto;
     /* optional */
-    margin-top: 20vh;
-    /* optional */
+    margin-top: 20px;
 }
 
 .price {
@@ -58,28 +57,29 @@ body {
 
 .currency {
     width: 24px;
-
+    margin-bottom: -4px;
 }
 
 .priceTria,
 .priceAurorite {
     display: inline;
-    font-size: 24px;
-    font-family: arial, helvetica, sans-serif;
-    /* color: #6a3a15; */
+    font-size: 22px;
+    font-family: "platypi";
+    color: dimgray;
 }
 
 .thumbnailWrapper {
     position: relative;
     display: inline-block;
     width: 100%;
+    max-width: 90vw;
 }
 
 .soldOutOverlay {
     position: absolute;
     inset: 0;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     object-fit: fill;
     opacity: 0.3;
     pointer-events: none;
@@ -98,6 +98,5 @@ body {
 .thumbnail {
     display: block;
     width: 100%;
-    max-width: 50vw;
     object-fit: contain;
 }
