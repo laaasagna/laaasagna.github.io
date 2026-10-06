@@ -38,7 +38,7 @@ function createCard() {
 function loadDetails(card) {
     editCard.querySelector("#thumbnailPreview").src = card.querySelector(".thumbnail").src;
     // auroriteInput.value = card.querySelector(".priceAurorite").textContent;
-    triaInput.value = Number((card.querySelector(".priceTria").textContent).replace(/,/g,""));
+    triaInput.value = Number((card.querySelector(".priceTria").textContent).replace(/,/g, ""));
     soldOutCheckbox.checked = !card.querySelector(".soldOutOverlay").hidden;
     editCard.querySelector(".soldOutOverlay").hidden = card.querySelector(".soldOutOverlay").hidden;
 }
@@ -84,17 +84,18 @@ async function saveShop() {
         // Saving thumbnails
         const thumbnail = card.querySelector(".thumbnail")
 
-        canvas.width = 200;
-        canvas.height = 200 * (thumbnail.naturalHeight / thumbnail.naturalWidth);
+        canvas.width = 300;
+        canvas.height = 300 * (thumbnail.naturalHeight / thumbnail.naturalWidth);
 
         const ctx = canvas.getContext("2d");
         ctx.drawImage(thumbnail, 0, 0, canvas.width, canvas.height);
-
+        console.log(canvas.toDataURL("image/png", 1).length * 0.75 / 1000)
         cardData.push([
             card.querySelector(".priceTria").textContent,
             card.querySelector(".soldOutOverlay").hidden,
-            canvas.toDataURL("image/jpeg", 0.9)
+            canvas.toDataURL("image/png", 1)
         ]);
+
     }
     localStorage.setItem("lastSave", JSON.stringify(cardData))
     saving = false;
