@@ -20,9 +20,7 @@ body {
     aspect-ratio: 0.8 auto;
     width: auto;
     background-color: #e2dcd1;
-    align-items: center;
     cursor: grab;
-    /* display: grid; */
 }
 
 .card.dragging {
@@ -57,7 +55,7 @@ body {
 }
 
 .currency {
-    width: clamp(10px, 3vw, 24px);
+    width: clamp(10px, 4vw, 24px);
     margin-bottom: -4px;
 }
 
@@ -65,8 +63,9 @@ body {
 .priceAurorite {
     display: inline;
     /* font-size: 22px; */
-    font-size: clamp(10px, 2.5vw, 24px);
-    font-family: "platypi";
+    font-size: clamp(10px, 3.5vw, 24px);
+    font-family: "crimson text";
+    font-weight: bold;
     color: dimgray;
 }
 

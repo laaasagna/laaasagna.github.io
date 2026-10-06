@@ -38,7 +38,7 @@ function createCard() {
 function loadDetails(card) {
     editCard.querySelector("#thumbnailPreview").src = card.querySelector(".thumbnail").src;
     // auroriteInput.value = card.querySelector(".priceAurorite").textContent;
-    triaInput.value = card.querySelector(".priceTria").textContent;
+    triaInput.value = Number((card.querySelector(".priceTria").textContent).replace(/,/g,""));
     soldOutCheckbox.checked = !card.querySelector(".soldOutOverlay").hidden;
     editCard.querySelector(".soldOutOverlay").hidden = card.querySelector(".soldOutOverlay").hidden;
 }
@@ -46,7 +46,12 @@ function loadDetails(card) {
 function saveDetails(card) {
     card.querySelector(".thumbnail").src = editCard.querySelector("#thumbnailPreview").src;
     // card.querySelector(".priceAurorite").textContent = auroriteInput.value;
-    card.querySelector(".priceTria").textContent = triaInput.value;
+    const triaValue = Number(triaInput.value)
+    if (triaValue > 9999) {
+        card.querySelector(".priceTria").textContent = triaValue.toLocaleString('en-US');
+    } else {
+        card.querySelector(".priceTria").textContent = triaValue
+    }
     card.querySelector(".soldOutOverlay").hidden = editCard.querySelector(".soldOutOverlay").hidden;
 }
 
@@ -118,7 +123,7 @@ addButton.addEventListener("click", function () {
 });
 saveButton.addEventListener("click", saveShop)
 loadButton.addEventListener("click", loadShop)
-clearButton.addEventListener("click", function() {
+clearButton.addEventListener("click", function () {
     for (const card of deck.querySelectorAll(".card")) {
         card.remove()
     }
@@ -131,10 +136,17 @@ var target = null;
 const preview = document.getElementById("thumbnailPreview")
 window.addEventListener('paste', (e) => {
     if (editing) {
-        e.preventDefault();
-        if (e.clipboardData.files) {
-            fileUpload.files = e.clipboardData.files;
-            preview.src = URL.createObjectURL(fileUpload.files[0]);
+        const editingField = document.activeElement &&
+            (
+                document.activeElement.matches("input, textarea, select") ||
+                document.activeElement.isContentEditable
+            );
+        if (!editingField) {
+            e.preventDefault();
+            if (e.clipboardData.files) {
+                fileUpload.files = e.clipboardData.files;
+                preview.src = URL.createObjectURL(fileUpload.files[0]);
+            }
         }
     }
 });
@@ -208,27 +220,15 @@ function setupDraggable(card) {
 
         const rect = card.getBoundingClientRect();
         const before = e.clientX < rect.left + rect.width / 2;
-
-        const container = deck;
         const target = before ? card : card.nextSibling;
 
         if (target !== draggedCard && target !== draggedCard.nextSibling) {
-            container.insertBefore(draggedCard, target);
+            deck.insertBefore(draggedCard, target);
         }
     });
 
     card.addEventListener("drop", (e) => {
         e.preventDefault();
-
-        if (!draggedCard || draggedCard === card) return;
-
-        const parent = deck;
-        // const isAfter = card.compareDocumentPosition(draggedCard) & Node.DOCUMENT_POSITION_FOLLOWING;
-
-        if (getDropPosition(card, e) === "after") {
-            parent.insertBefore(draggedCard, card.nextSibling);
-        } else {
-            parent.insertBefore(draggedCard, card);
-        }
+        // Not needed since dragover constantly updates the arrangement
     });
 }
